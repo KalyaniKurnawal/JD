@@ -16,7 +16,6 @@ public class MainActivity extends AppCompatActivity {
         int versionCode = BuildConfig.VERSION_CODE;
         String versionName = BuildConfig.VERSION_NAME;
 
-
         Log.i("VCODE", "onCreate: Vesrsion Code = "+versionCode);
         Log.i("VNAME", "onCreate: Version Name = "+versionName);
 
@@ -24,7 +23,7 @@ public class MainActivity extends AppCompatActivity {
         t2=(TextView)findViewById(R.id.txt2);
 
         t1.setText(versionName);
-        t2.setText(String.format("%d",versionCode));
+        t2.setText(versionCode);
 
     }
 }
