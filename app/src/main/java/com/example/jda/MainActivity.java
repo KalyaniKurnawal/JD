@@ -23,7 +23,8 @@ public class MainActivity extends AppCompatActivity {
         t2=(TextView)findViewById(R.id.txt2);
 
         t1.setText(versionName);
-        t2.setText(String.format("%d",versionCode));
+        String s = Integer.toString(versionCode);
+        t2.setText(s);
 
 
     }
