@@ -4,12 +4,14 @@ android {
     compileSdkVersion 28
 
 
+    def vcode = (int)(((new Date().getTime()/1000) - 1451606400) / 10)
+
 
     defaultConfig {
         applicationId "com.example.jda"
         minSdkVersion 15
         targetSdkVersion 28
-        versionCode 1
+        versionCode vcode
         versionName "1.0"
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
     }
