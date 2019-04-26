@@ -36,6 +36,16 @@ task printVersion {
         println("Version: " + mSdkVersion)
     }
 }
+
+task incrementVersionCode << {
+    def manifestFile = file('AndroidManifest.xml')
+    def matcher = Pattern.compile('versionCode=\"(\\d+)\"')
+            .matcher(manifestFile.getText())
+    matcher.find()
+    def manifestContent = matcher.replaceAll('versionCode=\"' +
+            ++Integer.parseInt(matcher.group(1)) + '\"')
+    manifestFile.write(manifestContent)
+}
 def getVersionName() {
     Properties properties = new Properties()
     def propFile = new File("${project.rootDir}/" + 'dts.build')
