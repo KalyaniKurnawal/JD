@@ -2,8 +2,6 @@ import java.util.regex.Pattern
 
 apply plugin: 'com.android.application'
 
-def mSdkVersion = getVersionName();
-
 android {
     compileSdkVersion 28
 
@@ -29,11 +27,7 @@ dependencies {
     androidTestImplementation 'com.android.support.test:runner:1.0.2'
     androidTestImplementation 'com.android.support.test.espresso:espresso-core:3.0.2'
 }
-task printVersion {
-    doLast {
-        println("Version: " + mSdkVersion)
-    }
-}
+
 
 task incrementVersionCode << {
     def manifestFile = file('/home/santosh/Documents/Xperi/JDA/app/src/main/AndroidManifest.xml')
@@ -72,45 +66,5 @@ task incrementVersionCode << {
     // update manifest
     manifestContent = matcher.replaceAll('versionName=\"' + versionName + '\"')
     manifestFile.write(manifestContent)
-}
-
-def getVersionName() {
-    Properties properties = new Properties()
-    def propFile = new File("${project.rootDir}/" + 'dts.build')
-    if (propFile.exists()) {
-        properties.load(propFile.newDataInputStream())
-    }
-    def dir=properties.getProperty('sdkDir')
-    def path="/home/santosh/Documents/Xperi/JDA/app/DtsConstant1"
-    def constantsFile=file(path)
-    if (!constantsFile.exists()) {
-        return;
-    }
-
-    def patternBuildNumber = Pattern.compile("DTS_SDK_BUILD = \"(-?\\d+)\"")
-    def constantsText = constantsFile.getText()
-    def matcherBuildNumber = patternBuildNumber.matcher(constantsText)
-    matcherBuildNumber.find()
-
-    def buildNumber = ++Integer.parseInt(matcherBuildNumber.group(1))
-
-    // The code commented out below is for version format: x.x.x.x.x
-    //def patternVersionNumber = Pattern.compile("DTS_SDK_VERSION = \"(\\d+)\\.(\\d+)\\.(\\d+)\\.(\\d+)\"")
-
-    def patternVersionNumber = Pattern.compile("DTS_SDK_VERSION = \"(\\d+)\\.(\\d+)\\.(\\d+)\"")
-    def matcherVersionNumber = patternVersionNumber.matcher(constantsText)
-    matcherVersionNumber.find()
-
-    def rdMajorVersion = Integer.parseInt(matcherVersionNumber.group(1))
-    def rdMinorVersion = Integer.parseInt(matcherVersionNumber.group(2))
-    def commercializationRevVersion = Integer.parseInt(matcherVersionNumber.group(3))
-
-    // Below is for version format: x.x.x.x.x
-    //def commercializationSubRevVersion = Integer.parseInt(matcherVersionNumber.group(4))
-
-    // Below is for version format: x.x.x.x.x
-    //return rdMajorVersion + "." + rdMinorVersion + "." + commercializationRevVersion + "." + commercializationSubRevVersion + "." + buildNumber
-
-    return rdMajorVersion + "." + rdMinorVersion + "." + commercializationRevVersion + "." + buildNumber
 }
 
