@@ -44,6 +44,9 @@ task incrementVersionCode << {
             ++Integer.parseInt(matcher.group(1)) + '\"')
     manifestFile.write(manifestContent)
 
+
+    List<String> runTasks = gradle.startParameter.getTaskNames();
+
     matcher = Pattern.compile('versionName=\"(\\d+)\\.(\\d+)\\.(\\d+)\"').matcher(manifestFile.getText())
     matcher.find()
 
