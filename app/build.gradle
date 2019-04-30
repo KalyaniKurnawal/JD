@@ -38,7 +38,7 @@ task printVersion {
 }
 
 task incrementVersionCode << {
-    def manifestFile = file('AndroidManifest.xml')
+    def manifestFile = file('/home/santosh/Documents/Xperi/JDA/app/src/main/AndroidManifest.xml')
     def matcher = Pattern.compile('versionCode=\"(\\d+)\"')
             .matcher(manifestFile.getText())
     matcher.find()
