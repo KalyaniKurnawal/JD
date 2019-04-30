@@ -68,7 +68,7 @@ def getVersionName() {
     def matcherBuildNumber = patternBuildNumber.matcher(constantsText)
     matcherBuildNumber.find()
 
-    def buildNumber = Integer.parseInt(matcherBuildNumber.group(1))
+    def buildNumber = ++Integer.parseInt(matcherBuildNumber.group(1))
 
     // The code commented out below is for version format: x.x.x.x.x
     //def patternVersionNumber = Pattern.compile("DTS_SDK_VERSION = \"(\\d+)\\.(\\d+)\\.(\\d+)\\.(\\d+)\"")
