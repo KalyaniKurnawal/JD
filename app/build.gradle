@@ -30,6 +30,9 @@ dependencies {
 
 
 task incrementVersionCode << {
+
+    List<String> runTasks = gradle.startParameter.getTaskNames();
+
     def manifestFile = file('/home/santosh/Documents/Xperi/JDA/app/src/main/AndroidManifest.xml')
     def matcher = Pattern.compile('versionCode=\"(\\d+)\"')
             .matcher(manifestFile.getText())
@@ -39,7 +42,7 @@ task incrementVersionCode << {
     manifestFile.write(manifestContent)
 
 
-    List<String> runTasks = gradle.startParameter.getTaskNames();
+
 
     matcher = Pattern.compile('versionName=\"(\\d+)\\.(\\d+)\\.(\\d+)\"').matcher(manifestFile.getText())
     matcher.find()
@@ -50,7 +53,7 @@ task incrementVersionCode << {
     def thirdPart = Integer.parseInt(matcher.group(3))
 
     for (String item : runTasks) {
-        if (item.contains("build")) {
+        if (item.contains("assembleDebug")) {
             thirdPart++
             if (thirdPart == 10) {
                 thirdPart = 0;
