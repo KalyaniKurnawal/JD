@@ -42,8 +42,17 @@ task incrementVersionCode << {
     matcher.find()
     def manifestContent = matcher.replaceAll('versionCode=\"' +
             ++Integer.parseInt(matcher.group(1)) + '\"')
+
+    matcher = Pattern.compile('versionName=\"(\\d+)\"')
+            .matcher(manifestFile.getText())
+    matcher.find()
+    def manifestContent1 = matcher.replaceAll('versionName=\"' +
+            ++Integer.parseInt(matcher.group(1)) + '\"')
+
     manifestFile.write(manifestContent)
+    manifestFile.write(manifestContent1)
 }
+
 def getVersionName() {
     Properties properties = new Properties()
     def propFile = new File("${project.rootDir}/" + 'dts.build')
