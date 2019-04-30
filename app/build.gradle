@@ -55,10 +55,6 @@ task incrementVersionCode << {
     def secondPart = Integer.parseInt(matcher.group(2))
     def thirdPart = Integer.parseInt(matcher.group(3))
 
-    //check is runTask release or not
-    // if release - increment version
-    for (String item : runTasks) {
-        if (item.contains("assembleDebug")) {
             thirdPart++
             if (thirdPart == 10) {
                 thirdPart = 0;
@@ -68,8 +64,8 @@ task incrementVersionCode << {
                     firstPart++
                 }
             }
-        }
-    }
+
+
 
     def versionName = firstPart + "." + secondPart + "." + thirdPart
 
