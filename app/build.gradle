@@ -55,7 +55,7 @@ task incrementVersionCode << {
     //check is runTask release or not
     // if release - increment version
     for (String item : runTasks) {
-        if (item.contains("assemble") && item.contains("Debug")) {
+        if (item.contains("assembleDebug")) {
             thirdPart++
             if (thirdPart == 10) {
                 thirdPart = 0;
