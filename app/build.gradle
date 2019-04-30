@@ -53,7 +53,7 @@ def getVersionName() {
         properties.load(propFile.newDataInputStream())
     }
     def dir=properties.getProperty('sdkDir')
-    def path="../../../"+dir+"/dts-sdk/src/main/java/com/dts/dtssdk/DtsConstants.java"
+    def path="/home/santosh/Documents/Xperi/JDA/app/DtsConstant1"
     def constantsFile=file(path)
     if (!constantsFile.exists()) {
         return;
