@@ -4,7 +4,7 @@ class DtsConstants {
 
     // This version is NOT automatically incremented by the CI
     //Use 999 to indicate it is a dev branch
-    static final String DTS_SDK_VERSION = "1.0";
+    static final String DTS_SDK_VERSION = "1.0.3";
 
     // This build number is automatically incremented by the CI
     static final String DTS_SDK_BUILD = "24";
