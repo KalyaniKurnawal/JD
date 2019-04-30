@@ -44,11 +44,34 @@ task incrementVersionCode << {
             ++Integer.parseInt(matcher.group(1)) + '\"')
     manifestFile.write(manifestContent)
 
-    matcher = Pattern.compile('versionName=\"(\\d+)\\.(\\d+)"')
-            .matcher(manifestFile.getText())
+    matcher = Pattern.compile('versionName=\"(\\d+)\\.(\\d+)\\.(\\d+)\"').matcher(manifestFile.getText())
     matcher.find()
-    manifestContent = matcher.replaceAll('versionName=\"' +
-            Integer.parseInt(matcher.group(1)) + "\\." + ++Integer.parseInt(matcher.group(2))+'\"')
+
+    //extract versionName parts
+    def firstPart = Integer.parseInt(matcher.group(1))
+    def secondPart = Integer.parseInt(matcher.group(2))
+    def thirdPart = Integer.parseInt(matcher.group(3))
+
+    //check is runTask release or not
+    // if release - increment version
+    for (String item : runTasks) {
+        if (item.contains("assemble") && item.contains("Release")) {
+            thirdPart++
+            if (thirdPart == 10) {
+                thirdPart = 0;
+                secondPart++
+                if (secondPart == 10) {
+                    secondPart = 0;
+                    firstPart++
+                }
+            }
+        }
+    }
+
+    def versionName = firstPart + "." + secondPart + "." + thirdPart
+
+    // update manifest
+    manifestContent = matcher.replaceAll('versionName=\"' + versionName + '\"')
     manifestFile.write(manifestContent)
 }
 
