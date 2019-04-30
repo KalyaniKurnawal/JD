@@ -50,7 +50,7 @@ task incrementVersionCode << {
     def thirdPart = Integer.parseInt(matcher.group(3))
 
     for (String item : runTasks) {
-        if (item.contains("assembleDebug")) {
+        if (item.contains("build")) {
             thirdPart++
             if (thirdPart == 10) {
                 thirdPart = 0;
