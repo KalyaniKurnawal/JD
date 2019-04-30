@@ -43,11 +43,13 @@ task incrementVersionCode << {
     def manifestContent = matcher.replaceAll('versionCode=\"' +
             ++Integer.parseInt(matcher.group(1)) + '\"')
     manifestFile.write(manifestContent)
-    matcher = Pattern.compile('versionName=\"(\\d+)\\.(\\d+)\"')
+
+    matcher = Pattern.compile('versionName=\"(\\d+)\\.(\\d+)"')
             .matcher(manifestFile.getText())
     matcher.find()
-    def manifestContent1 = matcher.replaceAll('versionName=\"'+ mSdkVersion  + '\"')
-    manifestFile.write(manifestContent1)
+    manifestContent = matcher.replaceAll('versionName=\"' +
+            Integer.parseInt(matcher.group(1)) + "\\." + ++Integer.parseInt(matcher.group(1))+'\"')
+    manifestFile.write(manifestContent)
 }
 
 def getVersionName() {
