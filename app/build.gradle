@@ -49,6 +49,8 @@ task incrementVersionCode << {
     def secondPart = Integer.parseInt(matcher.group(2))
     def thirdPart = Integer.parseInt(matcher.group(3))
 
+    for (String item : runTasks) {
+        if (item.contains("assemble") && item.contains("Release")) {
             thirdPart++
             if (thirdPart == 10) {
                 thirdPart = 0;
@@ -58,8 +60,8 @@ task incrementVersionCode << {
                     firstPart++
                 }
             }
-
-
+        }
+    }
 
     def versionName = firstPart + "." + secondPart + "." + thirdPart
 
