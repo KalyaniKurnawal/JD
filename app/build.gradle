@@ -2,8 +2,10 @@ import java.util.regex.Pattern
 
 apply plugin: 'com.android.application'
 
+
 android {
     compileSdkVersion 28
+
 
     defaultConfig {
         applicationId "com.example.jda"
@@ -28,6 +30,33 @@ dependencies {
     androidTestImplementation 'com.android.support.test.espresso:espresso-core:3.0.2'
 }
 
+task commitVersionName(type: Exec) {
+    def commitMessage = 'MPG-999 Adding SDK tag for version: ' + getVersionName()
+
+    executable = "git"
+    args "commit", "-m", commitMessage
+}
+
+/**
+ * Adds a tag for the version
+ */
+task addTag(type: Exec) {
+    println ":addTag - Add a Git tag with SDK version number"
+
+    def tagName = "ro" + getVersionName()
+    def commitMessage = "MPG-999 Added a tag " + tagName
+
+    executable = "git"
+    args "tag", "-f", tagName, "-m", commitMessage
+}
+
+/**
+ * Pushes the tag to Git repo
+ */
+task gitPush(type: Exec) {
+    executable = "git"
+    args "push", "origin", "ro" + getVersionName()
+}
 
 task incrementVersionCode << {
 
@@ -39,10 +68,10 @@ task incrementVersionCode << {
     matcher.find()
     def manifestContent = matcher.replaceAll('versionCode=\"' +
             ++Integer.parseInt(matcher.group(1)) + '\"')
+
+    versionCode=manifestContent
+
     manifestFile.write(manifestContent)
-
-
-
 
     matcher = Pattern.compile('versionName=\"(\\d+)\\.(\\d+)\\.(\\d+)\"').matcher(manifestFile.getText())
     matcher.find()
@@ -66,10 +95,44 @@ task incrementVersionCode << {
         }
     }
 
-    def versionName = firstPart + "." + secondPart + "." + thirdPart
+    versionName = firstPart + "." + secondPart + "." + thirdPart
 
     // update manifest
     manifestContent = matcher.replaceAll('versionName=\"' + versionName + '\"')
     manifestFile.write(manifestContent)
 }
 
+def getVersionName() {
+    Properties properties = new Properties()
+    def path="/home/santosh/Documents/Xperi/JDA/app/src/main/java/com/example/jda/Constant.java"
+    def constantsFile=file(path)
+    if (!constantsFile.exists()) {
+        return;
+    }
+
+    def patternBuildNumber = Pattern.compile("DTS_SDK_BUILD = \"(-?\\d+)\"")
+    def constantsText = constantsFile.getText()
+    def matcherBuildNumber = patternBuildNumber.matcher(constantsText)
+    matcherBuildNumber.find()
+
+    def buildNumber = Integer.parseInt(matcherBuildNumber.group(1))
+
+    // The code commented out below is for version format: x.x.x.x.x
+    //def patternVersionNumber = Pattern.compile("DTS_SDK_VERSION = \"(\\d+)\\.(\\d+)\\.(\\d+)\\.(\\d+)\"")
+
+    def patternVersionNumber = Pattern.compile("DTS_SDK_VERSION = \"(\\d+)\\.(\\d+)\\.(\\d+)\"")
+    def matcherVersionNumber = patternVersionNumber.matcher(constantsText)
+    matcherVersionNumber.find()
+
+    def rdMajorVersion = Integer.parseInt(matcherVersionNumber.group(1))
+    def rdMinorVersion = Integer.parseInt(matcherVersionNumber.group(2))
+    def commercializationRevVersion = Integer.parseInt(matcherVersionNumber.group(3))
+
+    // Below is for version format: x.x.x.x.x
+    //def commercializationSubRevVersion = Integer.parseInt(matcherVersionNumber.group(4))
+
+    // Below is for version format: x.x.x.x.x
+    //return rdMajorVersion + "." + rdMinorVersion + "." + commercializationRevVersion + "." + commercializationSubRevVersion + "." + buildNumber
+
+    return rdMajorVersion + "." + rdMinorVersion + "." + commercializationRevVersion + "." + buildNumber
+}
